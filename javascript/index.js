@@ -14,15 +14,21 @@ const milUniElement = document.getElementById('milUni');
 const splitsElement = document.getElementById('splits');
 
 function printTime() {
-  // ... your code goes here
+  const time = chronometer.split();
+  //Check if the clock actually runs
+  console.log(time);
+  printMinutes(time);
+  printSeconds(time);
 }
 
-function printMinutes() {
-  // ... your code goes here
+function printMinutes(time) {
+  minDecElement.textContent = time[0];
+  minUniElement.textContent = time[1];
 }
 
-function printSeconds() {
-  // ... your code goes here
+function printSeconds(time) {
+  secDecElement.textContent = time[3];
+  secUniElement.textContent = time[4];
 }
 
 // ==> BONUS
@@ -38,28 +44,74 @@ function clearSplits() {
   // ... your code goes here
 }
 
-function setStopBtn() {
-  // ... your code goes here
+function setStopBtn(evt) {
+  //Stop the chrono
+  chronometer.stop();
+  //modify the text
+  btnLeftElement.textContent = 'START';
+  btnRightElement.textContent = 'RESET';
+  //change the buttons
+  btnLeftElement.classList.toggle('stop');
+  btnLeftElement.classList.toggle('start');
+  btnRightElement.classList.toggle('split');
+  btnRightElement.classList.toggle('reset');
 }
 
 function setSplitBtn() {
-  // ... your code goes here
+  //create the new HTML element
+  const newHTML = document.createElement('li');
+  //fill the new HTML element with the value of the split
+  newHTML.textContent = chronometer.split();
+  //append the HTML element to splitsElement
+  splitsElement.appendChild(newHTML);
 }
 
 function setStartBtn() {
-  // ... your code goes here
+  //Start the chrono
+  chronometer.start();
+
+  //modify the text
+  btnLeftElement.textContent = 'STOP';
+  btnRightElement.textContent = 'SPLIT';
+  //change the buttons
+  btnLeftElement.classList.toggle('stop');
+  btnLeftElement.classList.toggle('start');
+  btnRightElement.classList.toggle('split');
+  btnRightElement.classList.toggle('reset');
 }
 
 function setResetBtn() {
-  // ... your code goes here
+  //reset chrono
+  chronometer.reset()
+  //delete all Li
+  splitsElement.innerHTML = ""
+
 }
 
 // Start/Stop Button
-btnLeftElement.addEventListener('click', () => {
-  // ... your code goes here
+btnLeftElement.addEventListener('click', (evt) => {
+  //DONT UNDERSTAND THIS : why aren't evt.target and evt.target.textContent not coherent ?
+  /*
+  console.log(">>>",evt,evt.target,evt.target.textContent)
+  console.log(">>>",btnLeftElement,btnLeftElement.textContent)
+  */
+
+  if (evt.target.textContent === 'START') {
+    setStartBtn();
+  } else {
+    setStopBtn();
+  }
 });
 
 // Reset/Split Button
-btnRightElement.addEventListener('click', () => {
-  // ... your code goes here
+btnRightElement.addEventListener('click', (evt) => {
+  if (evt.target.textContent === 'SPLIT') {
+    setSplitBtn();
+  }
+  else {
+    setResetBtn()
+  }
 });
+
+//Set initial state and values
+setInterval(printTime, 1000);
